@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+<head>
+<style>
+.p2 {
+  font-family: Arial, Helvetica, sans-serif;
+  color: white;
+  margin-bottom:0;
+  margin : 0; 
+  padding-top:0;
+  padding-bottom:0;
+}
+
+.p3 {
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  color: white;
+}
+</style>
+</head>
+<body style="background-color:#5a5a5a">
+<title>Hello from Flask</title>
+  <h1 class="p3">{{base}} </h1>
+
+<table border="0" cellpadding="0" cellspacing="5" width="100%">
+	<tr>
+		<td width="518">
+			<p><img src="{{img}}" border="0" width="500"></p>
+		</td>
+		<td class="p2">
+    		{%for l in log%}
+    		<p class="p2">{{l}}</p>
+    		{% endfor %}
+			{%for f in name%}
+			<ul>
+				<li><a href="{{f}}">{{f}}</a>
+			</ul>
+			{% endfor%}
+		</td>
+	</tr>
+</table>

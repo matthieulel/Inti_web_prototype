@@ -1,0 +1,123 @@
+<!doctype html>
+<html>
+<head>
+<style>
+body {
+ background-color:#5a5a5a;
+ margin:0;
+}
+/* Style the header */
+.header {
+  background-color: darkorange;
+  padding: 1px;
+  text-align: center;
+}
+/* Style the top navigation bar */
+.topnav {
+  overflow: hidden;
+  background-color: #333;
+  font-family: lucida console, courier, monospace;
+}
+
+/* Style the topnav links */
+.topnav a {
+  float: left;
+  display: block;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+/* Change color on hover */
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+h1 {
+	font-family: Arial, Helvetica, sans-serif;
+	font-weight: bold;
+	font-size: 200%;
+}
+
+.p2 {
+  font-family: Arial, Helvetica, sans-serif;
+  color: white;
+  margin : 3px;
+  margin-left:20px;
+}
+
+a:link {
+	color: gold;
+	text-decoration: none;
+}
+a:hover {
+	color: orange;
+	text-decoration: none;
+}
+
+.p3 {
+  font-family: Arial, Helvetica, sans-serif;
+  color: white;
+  font-weight: bold;
+  margin:5px;
+}
+ul {
+	list-style-type:square;
+	font-family: Arial, Helvetica, sans-serif;
+	color: white;
+}
+.column {
+	float:left;
+	width:45%;
+	padding: 0 10px;
+	margin-bottom:16px;
+}
+.row1{
+	height:70%;
+}
+.row2{
+	height:30%
+}
+.card {
+	box-shadow:5px 5px 20px gray;
+}
+.italic
+{
+	font-style:oblique;
+	font-size:smaller;
+	color:black;
+}
+</style>
+</head>
+<body>
+<title>Inti</title>
+<div class="header"> 
+	<h1> Inti... <span class="italic">Sol'EX spectroheliography processing</span></h1>
+</div>
+<div class="topnav">
+  <a href="{{url_for('upload_file')}}">Upload</a>
+</div>
+  <h2 class="p3">{{base}} </h2>
+  
+<div>
+<div class="column">
+	<img class="card" src="{{img}}" width=100%>
+</div>
+
+<div class="column">
+	<div class="row1">
+		{%for l in log%}
+    		<p class="p2">{{l}}</p>
+		{% endfor %}
+	</div>
+	<div class="row2">
+			<ul>
+				{%for f in name2%}
+				<li><a href="/static/myupload/{{f}}">{{f}}</a>
+				{% endfor%}
+			</ul>
+	</div>
+</div>
+<div>
