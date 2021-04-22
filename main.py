@@ -34,13 +34,13 @@ def results(basefich):
     basefich='/'+os.path.join(app.config['UPLOAD_FOLDER'], basefich)
     list_files=[]
     list_files2=[]
-    list_files.append(basefich+'_recon.fit')
-    list_files.append(basefich+'_img.fit')
-    list_files.append(basefich+'_mean.fit')
+    list_files.append(basefich+'_recon.fits')
+    list_files.append(basefich+'_img.fits')
+    list_files.append(basefich+'_mean.fits')
     list_files.append(basefich+'.txt')
-    list_files2.append(basefich2+'_recon.fit')
-    list_files2.append(basefich2+'_img.fit')
-    list_files2.append(basefich2+'_mean.fit')
+    list_files2.append(basefich2+'_recon.fits')
+    list_files2.append(basefich2+'_img.fits')
+    list_files2.append(basefich2+'_mean.fits')
     list_files2.append(basefich2+'.txt')
     myimage=basefich+'_disk.png'
     

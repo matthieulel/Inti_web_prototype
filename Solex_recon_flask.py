@@ -188,7 +188,7 @@ def circularise (img,iw,ih):
         mylog.append ('Centre cercle x0,y0 et diamètre :'+str(x0)+' '+str(y0)+' '+str(diam_cercle))        
         
     #print('Ratio:', ratio)
-    mylog.append('Ratio:'+"{:.2f}".format(ratio))
+    mylog.append('Ratio:'+"{:.3f}".format(ratio))
     if ratio >=10:
         #print('Rpport hauteur sur largeur supérieur à 10')
         mylog.append('Rpport hauteur sur largeur supérieur à 10')
@@ -353,7 +353,7 @@ def solex_proc_all(serfile, filename):
     # sauve en fits l'image moyenne avec suffixe _mean
     savefich=basefich+'_mean'               # Nom du fichier de l'image moyenne
     SaveHdu=fits.PrimaryHDU(myimg,header=hdr)
-    SaveHdu.writeto(savefich+'.fit',overwrite=True)
+    SaveHdu.writeto(savefich+'.fits',overwrite=True)
     yield '<p>'+str(savefich)+'</p>'
     
     #debug
@@ -380,7 +380,7 @@ def solex_proc_all(serfile, filename):
     """
     
     savefich=basefich+'_mean'
-    ImgFile=savefich+'.fit'
+    ImgFile=savefich+'.fits'
     #ouvre image _mean qui la moyenne de toutes les trames spectrales du fichier ser
     hdulist = fits.open(ImgFile)
     hdu=hdulist[0]
@@ -583,8 +583,8 @@ def solex_proc_all(serfile, filename):
     #sauve fichier disque reconstruit 
     hdu.header['NAXIS1']=FrameCount-1
     DiskHDU=fits.PrimaryHDU(Disk,header=hdu.header)
-    DiskHDU.writeto(basefich+'_img.fit',overwrite='True')
-    toprint=basefich+'_img.fit'
+    DiskHDU.writeto(basefich+'_img.fits',overwrite='True')
+    toprint=basefich+'_img.fits'
     yield '<p>'+str(toprint)+'</p>'
     
     if flag_display:
@@ -661,7 +661,7 @@ def solex_proc_all(serfile, filename):
     
     #sauvegarde le fits
     DiskHDU=fits.PrimaryHDU(img,header=hdu.header)
-    DiskHDU.writeto(basefich+'_corr.fit', overwrite='True')
+    DiskHDU.writeto(basefich+'_corr.fits', overwrite='True')
      
     
     """
@@ -675,7 +675,7 @@ def solex_proc_all(serfile, filename):
     frame=np.array(NewImg, dtype='uint16')
     hdu.header['NAXIS1']=newiw
     DiskHDU=fits.PrimaryHDU(frame,header=hdu.header)
-    DiskHDU.writeto(basefich+'_circle.fit',overwrite='True')
+    DiskHDU.writeto(basefich+'_circle.fits',overwrite='True')
     
     """
     --------------------------------------------------------------
@@ -773,7 +773,7 @@ def solex_proc_all(serfile, filename):
     frame=np.array(BelleImage, dtype='uint16')
     # sauvegarde de l'image deflattée
     DiskHDU=fits.PrimaryHDU(frame,header=hdu.header)
-    DiskHDU.writeto(basefich+'_flat.fit',overwrite='True')
+    DiskHDU.writeto(basefich+'_flat.fits',overwrite='True')
    
     """
     -----------------------------------------------------------------------
@@ -823,6 +823,11 @@ def solex_proc_all(serfile, filename):
                 NewImg[:,i]=NewLine
             NewImg[NewImg<=BackGround]=BackGround
             img=NewImg
+        else:
+            toprint='Angle slant: 0° '
+            mylog.append(toprint)
+            yield '<p>'+str(toprint)+'</p>'
+            
    
     # refait un calcul de mise a l'echelle
     # le tilt peut avoir legerement modifié la forme
@@ -832,8 +837,8 @@ def solex_proc_all(serfile, filename):
     # sauvegarde en fits de l'image finale
     frame=np.array(img, dtype='uint16')
     DiskHDU=fits.PrimaryHDU(frame,header=hdu.header)
-    DiskHDU.writeto(basefich+'_recon.fit', overwrite='True')
-    toprint=basefich+'_recon.fit'
+    DiskHDU.writeto(basefich+'_recon.fits', overwrite='True')
+    toprint=basefich+'_recon.fits'
     yield '<p>'+str(toprint)+'</p>'
     
     frame1=np.copy(frame)
@@ -846,7 +851,7 @@ def solex_proc_all(serfile, filename):
    
     #sauvegarde en png
     cv2.imwrite(basefich+'_disk.png',frame_contrasted)
-    myimage=basefich+'_disk.png'
+    #myimage=basefich+'_disk.png'
     
     #sauvegarde les infos de traitements
     Infos_txt=basefich+'.txt'
