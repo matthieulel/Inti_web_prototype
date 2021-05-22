@@ -1,6 +1,6 @@
 <h1 align="center"> INTI</h1>
 
-INTI est une application Web qui traite les fichiers SER vidéo pour générer une image monochromatique du soleil, avec toutes les corrections appliquées de manière entièrement automatiques.
+INTI est une application Web qui traite les fichiers SER vidéo pour générer une image monochromatique du soleil, avec toutes les corrections appliquées de manière entièrement automatique.
 
 <br/>
 
@@ -25,7 +25,7 @@ Les fichiers .ser peuvent parfois devenir très volumineux. Cette taille de fich
 Il est possible d'utiliser INTI tel quel sur sa machine personnelle grâce au container docker qui a été créé pour réduire les temps de traitements.
 
 ## Docker ?
-Docker est un logiciel libre permettant de lancer des applications dans des conteneurs logiciels. Cela permets dans notre cas d'utiliser INTI (développé en Python), sans avoir à installer Python et les modules nécessaires sur notre machibe. Plus d'informations ici :  [Docker - Wikipedia](https://fr.wikipedia.org/wiki/Docker_(logiciel)
+Docker est un logiciel libre permettant de lancer des applications dans des conteneurs logiciels. Cela permet dans notre cas d'utiliser INTI (développé en Python), sans avoir à installer Python et les modules nécessaires sur notre machine. Plus d'informations ici :  [Docker - Wikipedia](https://fr.wikipedia.org/wiki/Docker_(logiciel)
 
 
 <br/>
@@ -86,13 +86,13 @@ Il est également possible de lancer le container en utilisant l'application Doc
 
 
 
-## 5 - Accèder à l'application
+## 5 - Accéder à l'application
 
-Pour accèder à l'application, ouvrez un navigateur et tapez l'adresse suivante : 127.0.0.1:5000
+Pour accéder à l'application, ouvrez un navigateur et tapez l'adresse suivante : 127.0.0.1:5000
 
 ![5.1-access_application](https://github.com/Vdesnoux/Inti/docs/container/result.png "5.1")
 
-Il est également possible d'y acèder en appuyant sur le bouton "Open in browser" dans le menu Container de docker engine, sur notre inti_flask.
+Il est également possible d'y accéder en appuyant sur le bouton "Open in browser" dans le menu Container de docker engine, sur notre inti_flask.
 
 Enjoy.
 
