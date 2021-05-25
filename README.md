@@ -6,7 +6,7 @@ INTI est une application Web qui traite les fichiers SER vidéo pour générer u
 
 # Comment ça fonctionne ?
 
-Une seule action : ajoutez votre fichier video .ser en cliquant sur le bouton uploads.
+Une seule action : ajoutez votre fichier vidéo .ser en cliquant sur le bouton uploads.
 Vos pouvez directement télécharger les résultats du traitement.
 
 <br/>
@@ -25,7 +25,7 @@ Les fichiers .ser peuvent parfois devenir très volumineux. Cette taille de fich
 Il est possible d'utiliser INTI tel quel sur sa machine personnelle grâce au container docker qui a été créé pour réduire les temps de traitements.
 
 ## Docker ?
-Docker est un logiciel libre permettant de lancer des applications dans des conteneurs logiciels. Cela permet dans notre cas d'utiliser INTI (développé en Python), sans avoir à installer Python et les modules nécessaires sur notre machine. Plus d'informations ici :  [Docker - Wikipedia](https://fr.wikipedia.org/wiki/Docker_(logiciel)
+Docker est un logiciel libre permettant de lancer des applications dans des conteneurs logiciels. Cela permet dans notre cas d'utiliser INTI (développé en Python), sans avoir à installer Python et les modules nécessaires sur notre machine. Plus d'informations ici :  [Docker - Wikipedia](https://fr.wikipedia.org/wiki/Docker_(logiciel))
 
 
 <br/>
