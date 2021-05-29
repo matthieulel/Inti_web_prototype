@@ -37,7 +37,7 @@ Se rendre à cette adresse, télécharger et installer Docker Desktop : https://
 
 Sur windows10, il est parfois demandé d'installer la nouvelle version du WSL2 comme l'image 1.1 ci-dessous)
 
-![1.1-pull_container](https://github.com/Vdesnoux/Inti/tree/main/docs/container/wsl2_install.png "1.1")
+![1.1-pull_container](https://github.com/Vdesnoux/Inti/blob/main/docs/container/wsl2_install.png "1.1")
 
 
 <br/>
@@ -46,7 +46,7 @@ Sur windows10, il est parfois demandé d'installer la nouvelle version du WSL2 c
 
  Une fois installé, lancez Docker Desktop. Une fois le Docker Engine démarré, la baleine doit être en vert, comme l'image 2.1 ci-dessous.
 
-![2.1-pull_container](https://github.com/Vdesnoux/Inti/tree/main/docs/container/docker_started.png "2.1")
+![2.1-pull_container](https://github.com/Vdesnoux/Inti/blob/main/docs/container/docker_started.png "2.1")
 
 
 <br/>
@@ -59,12 +59,12 @@ Sur windows10, il est parfois demandé d'installer la nouvelle version du WSL2 c
  docker pull matthieulel/inti_flask
 ```
 
-![3.1-pull_container](https://github.com/Vdesnoux/Inti/tree/main/docs/container/docker_pull_inti_flask.png "3.1")
+![3.1-pull_container](https://github.com/Vdesnoux/Inti/blob/main/docs/container/docker_pull_inti_flask.png "3.1")
 
 
 Voici ce que vous devriez avoir une fois le téléchargement terminé.
 
-![3.2-pull_result](https://github.com/Vdesnoux/Inti/tree/main/docs/container/docker_pull_finish.png "3.2")
+![3.2-pull_result](https://github.com/Vdesnoux/Inti/blob/main/docs/container/pull_finish.png "3.2")
 
 
 
@@ -76,13 +76,13 @@ Pour lancer l'application INTI, il faut lancer le container avec cette commande,
 docker run -p 5000:5000 matthieulel/inti_flask
 ```
 
-![4.1-launch_application](https://github.com/Vdesnoux/Inti/tree/main/docs/container/launch_inti_flask.png "4.1")
+![4.1-launch_application](https://github.com/Vdesnoux/Inti/blob/main/docs/container/launch_inti_flask.png "4.1")
 
 
 
 Il est également possible de lancer le container en utilisant l'application Docker Desktop, dans le menu Image. Il suffit de cliquer sur le bouton RUN de l'image correspondant à inti_flask, et de renseigner le port sur 5000, comme le montre l'image 4.2 ci-dessous.
 
-![4.1-launch_application](https://github.com/Vdesnoux/Inti/tree/main/docs/container/launch_from_desktop.png "4.2")
+![4.1-launch_application](https://github.com/Vdesnoux/Inti/blob/main/docs/container/launch_from_desktop.png "4.2")
 
 
 
@@ -90,7 +90,7 @@ Il est également possible de lancer le container en utilisant l'application Doc
 
 Pour accéder à l'application, ouvrez un navigateur et tapez l'adresse suivante : 127.0.0.1:5000
 
-![5.1-access_application](https://github.com/Vdesnoux/Inti/docs/container/result.png "5.1")
+![5.1-access_application](https://github.com/Vdesnoux/Inti/blob/main/docs/container/result.png "5.1")
 
 Il est également possible d'y accéder en appuyant sur le bouton "Open in browser" dans le menu Container de docker engine, sur notre inti_flask.
 
