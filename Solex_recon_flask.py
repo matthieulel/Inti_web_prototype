@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 Created on Thu Dec 31 11:42:32 2020
+version du 30 mai 2021
 
 @author: valerie desnoux
 
@@ -69,6 +70,12 @@ def detect_bord (img, axis, offset):
         #plt.title('Profil X ')
         #plt.plot(xmean)
         #plt.show()
+        
+        #ajout 30 mai 2021 pour seuils calcium
+        b=np.max(xmean)
+        bb=b*0.5
+        xmean[xmean>bb]=bb
+
         xmean=gaussian_filter1d(xmean, 11)
         xth=np.gradient(xmean)
         #plt.plot(xth)
@@ -126,9 +133,9 @@ def detect_y_of_x (img, x1,x2):
     yl2_11=np.gradient(yl2_1)
     #plt.plot(yl2_11)
     #plt.show()
-    yl2_11[abs(yl2_11)>20]=1
+    yl2_11[abs(yl2_11)>20]=20
     try:
-        index=np.where (yl2_11==1)
+        index=np.where (yl2_11==20)
         h1=index[0][0]
         h2=index[0][-1]
     except:
@@ -188,7 +195,7 @@ def circularise (img,iw,ih):
         mylog.append ('Centre cercle x0,y0 et diamètre :'+str(x0)+' '+str(y0)+' '+str(diam_cercle))        
         
     #print('Ratio:', ratio)
-    mylog.append('Ratio:'+"{:.3f}".format(ratio))
+    mylog.append('Ratio SY/SX : '+"{:.3f}".format(ratio))
     if ratio >=10:
         #print('Rpport hauteur sur largeur supérieur à 10')
         mylog.append('Rpport hauteur sur largeur supérieur à 10')
@@ -552,6 +559,10 @@ def solex_proc_all(serfile, filename):
             deci=fit[j][1]
             try:
                 IntensiteRaie[j]=(img[j,LineRecal+dx] *(1-deci)+deci*img[j,LineRecal+dx+1])
+                #modif 30 mai 2021
+                if img[j,LineRecal+dx]>=65000:
+                    IntensiteRaie[j]=64000
+                    #print ('intensite : ', img[j,LineRecal+dx])
             except:
                 IntensiteRaie[j]=IntensiteRaie[j-1]
 
@@ -708,7 +719,7 @@ def solex_proc_all(serfile, filename):
     ToSpline= ydisk[y1:y2]
  
     
-    #Smoothed2=savgol_filter(ToSpline,301, 3) # window size, polynomial order
+    Smoothed2=savgol_filter(ToSpline,301, 3) # window size, polynomial order
     #best fit d'un polynome degre 4
     np_m=np.asarray(ToSpline)
     ym=np_m.T
@@ -733,7 +744,7 @@ def solex_proc_all(serfile, filename):
     """
     
     # divise le profil reel par son filtre ce qui nous donne le flat
-    hf=np.divide(ToSpline,Smoothed)
+    hf=np.divide(ToSpline,Smoothed2)
     
     # elimine possible artefact de bord
     hf=hf[5:-5]
@@ -746,6 +757,8 @@ def solex_proc_all(serfile, filename):
     
     Smoothed=np.concatenate((a,Smoothed,b))
     ToSpline=np.concatenate((a,ToSpline,b))
+    
+    Smoothed2=np.concatenate((a,Smoothed2,b))
     
     #plt.plot(ToSpline)
     #plt.plot(Smoothed)
@@ -782,8 +795,8 @@ def solex_proc_all(serfile, filename):
     """
     img=frame
     if flag_nobords==False:
-        # correction de tilt uniquement si on voit les bords droit/gauche
-        # trouve les coordonnées y des bords du disque dont on a les x1 et x2 
+        # correction de slant uniquement si on voit les limbes droit/gauche
+        # trouve les coordonnées y des limbes du disque dont on a les x1 et x2 
         # pour avoir les coordonnées y du grand axe horizontal
         # on cherche la projection de la taille max du soleil en Y et en X
         x1,x2=detect_bord(frame, axis=0,offset=0)
@@ -821,7 +834,7 @@ def solex_proc_all(serfile, filename):
                 xcalc=f(y)
                 NewLine=xcalc
                 NewImg[:,i]=NewLine
-            NewImg[NewImg<=BackGround]=BackGround
+            NewImg[NewImg<=0]=0  #modif du 19/05/2021 etait a 1000
             img=NewImg
         else:
             toprint='Angle slant: 0° '
@@ -830,8 +843,8 @@ def solex_proc_all(serfile, filename):
             
    
     # refait un calcul de mise a l'echelle
-    # le tilt peut avoir legerement modifié la forme
-    # mais en fait pas vraiment...
+    # le slant peut avoir legerement modifié la forme
+    # mais en fait pas vraiment... donc on met en commentaire
     # img, newiw=circularise(img,newiw, ih)
     
     # sauvegarde en fits de l'image finale
