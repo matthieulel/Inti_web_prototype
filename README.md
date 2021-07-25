@@ -64,8 +64,9 @@ Voici ce que vous devriez avoir une fois le téléchargement terminé. Rassurez-
 
 Pour lancer le container, allez sur l'application Docker Desktop, dans le menu Image. Il suffit de cliquer sur le bouton RUN de l'image correspondant à inti-docker-dev.
 
-![4.1-launch_application](https://github.com/Vdesnoux/Inti/blob/main/docs/container/launch_from_desktop.png "4.2")
+![4.1-launch_application](https://github.com/Vdesnoux/Inti/blob/main/docs/container/launch_from_desktop.png "4.1")
 
+<br/>
 
  Une fenêtre va s'ouvrir dans laquelle vous allez pouvoir saisir la configurations avec trois éléments, comme le montre l'image 4.2 ci-dessous. :
  
@@ -74,6 +75,11 @@ Pour lancer le container, allez sur l'application Docker Desktop, dans le menu I
  - Le Container Path, à savoir un nom de correspondance que vous utiliserez dans l'application. Il est important de ne pas oublier le / devant le nom saisit.
 
 
+
+![4.2-settings_run_docker](https://github.com/matthieulel/Inti/blob/dev/docs/container/settings_run_docker.png "4.2")
+
+
+<br/>
 
 ## 5 - Accéder à l'application
 
