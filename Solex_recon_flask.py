@@ -6,8 +6,6 @@ version du 30 mai 2021
 @author: valerie desnoux
 
 
-
-
 -----------------------------------------------------------------------------
 calcul sur une image des ecarts simples entre min de la raie
 et une ligne de reference
@@ -25,17 +23,17 @@ import cv2
 import sys
 import math
 from scipy.ndimage import gaussian_filter1d
+import logging
 
-mylog=[]
+file_in_progress_log=[]
+
+
 
 def myproc(message):
     print ('myproc : ', message)
     img=message+' from proc'
-    yield '<body style="background-color:#5a5a5a; color:#ffffff; font-family: Lucida Console, Courier, monospace;">'
     for i in range (0,2):
         time.sleep(1)
-        yield '<p> sub item </p>'
-    yield '<script>document.location.href="/stream/hello"</script>'
     return img
 
 def detect_bord (img, axis, offset):
@@ -149,19 +147,23 @@ def detect_y_of_x (img, x1,x2):
     return y_x1,y_x2
 
 def circularise (img,iw,ih):
-    global mylog
+    global file_in_progress_log
     y1,y2=detect_bord (img, axis=1,offset=5)    # bords verticaux
     x1,x2=detect_bord (img, axis=0,offset=5)    # bords horizontaux
     #print ('Limites horizontales x1, x2 : ',x1,x2)
     toprint='Limites horizontales x1, x2 : '+str(x1)+' '+str(x2)
-    mylog.append(toprint)
-    #yield '<p>'+str(toprint)+'</p>'
+    file_in_progress_log.append(toprint)
+
+    # log time
+    logging.debug(f'{toprint}')
+
+
     TailleX=int(x2-x1)
     if TailleX+10<int(iw/5) or TailleX+10>int(iw*.99):
         #print ('Pas de bord solaire pour determiner la geometrie')
-        mylog.append('Pas de bord solaire pour determiner la geometrie')
+        file_in_progress_log.append('Pas de bord solaire pour determiner la geometrie')
         #print('Reprendre les traitements en manuel avec ISIS')
-        mylog.append('Reprendre les traitements en manuel avec ISIS')
+        file_in_progress_log.append('Reprendre les traitements en manuel avec ISIS')
         #print(TailleX, iw)
         ratio=0.5
         flag_nobords=True
@@ -171,7 +173,7 @@ def circularise (img,iw,ih):
         y_x1,y_x2=detect_y_of_x(img, x1, x2)
         flag_nobords=False
         #print('Axe y_x1, y_x2',y_x1,y_x2)
-        mylog.append('Axe y_x1, y_x2 : '+str(y_x1)+' '+str(y_x2))
+        file_in_progress_log.append('Axe y_x1, y_x2 : '+str(y_x1)+' '+str(y_x2))
         # on calcul la coordonnée moyenne du grand axe horizontal 
         ymoy=int((y_x2+y_x1)/2)
         #ymoy=y_x1
@@ -192,14 +194,15 @@ def circularise (img,iw,ih):
         y0=y_x1
         cercle=[x0,y0, diam_cercle]
         #print ('Centre cercle x0,y0 et diamètre :',x0, y0, diam_cercle)
-        mylog.append ('Centre cercle x0,y0 et diamètre :'+str(x0)+' '+str(y0)+' '+str(diam_cercle))        
+        file_in_progress_log.append ('Centre cercle x0,y0 et diamètre :'+str(x0)+' '+str(y0)+' '+str(diam_cercle))        
         
     #print('Ratio:', ratio)
-    mylog.append('Ratio SY/SX : '+"{:.3f}".format(ratio))
+    file_in_progress_log.append('Ratio SY/SX : '+"{:.3f}".format(ratio))
     if ratio >=10:
         #print('Rpport hauteur sur largeur supérieur à 10')
-        mylog.append('Rpport hauteur sur largeur supérieur à 10')
-        sys.exit()
+        file_in_progress_log.append('Rpport hauteur sur largeur supérieur à 10')
+        #-----------------sys.exit()
+        print('ERROR Ratio >10  --  STOP PROCESS !')
     #nouvelle taille image en y 
     newiw=int(iw*ratio)
     
@@ -218,6 +221,8 @@ def circularise (img,iw,ih):
     
 
 def solex_proc_all(serfile, filename):
+
+    print('Work in progress ...')
     flag_display=0
     shift=0
     """
@@ -246,14 +251,17 @@ def solex_proc_all(serfile, filename):
     ----------------------------------------------------------------------------
     """
 
-    global mylog
-    mylog=[]
+    global file_in_progress_log
+    file_in_progress_log=[]
 
-    yield '<body style="background-color:#5a5a5a; color:#ffffff" >'
-    yield '<p>'+str(filename)+'</p>'
-    mylog.append(filename)
+
+
+    # log time
+    logging.debug(f'Filename : {filename}')
+    file_in_progress_log.append(filename)
 
     basefich=os.path.splitext(serfile)[0]
+    print(basefich)
     
     #ouverture et lecture de l'entete du fichier ser
     f=open(serfile, "rb")
@@ -291,8 +299,10 @@ def solex_proc_all(serfile, filename):
     FrameCount=FrameCount[0]
     #print('nb de frame :',FrameCount)
     toprint='nb de frame :'+ str(FrameCount)
-    mylog.append(toprint)
-    yield '<p>'+str(toprint)+'</p>'
+    file_in_progress_log.append(toprint)
+    
+    # log time
+    logging.debug(f'{toprint}')
 
     ok_flag=True              # Flag pour sortir de la boucle de lexture avec exit
     count=Width*Height        # Nombre d'octet d'une trame
@@ -361,7 +371,8 @@ def solex_proc_all(serfile, filename):
     savefich=basefich+'_mean'               # Nom du fichier de l'image moyenne
     SaveHdu=fits.PrimaryHDU(myimg,header=hdr)
     SaveHdu.writeto(savefich+'.fits',overwrite=True)
-    yield '<p>'+str(savefich)+'</p>'
+        # log time
+    logging.debug(f'Save file : {savefich}')
     
     #debug
     #t1=float(time.time())
@@ -399,8 +410,10 @@ def solex_proc_all(serfile, filename):
     y1,y2=detect_bord(myimg, axis=1, offset=5)
     #print ('Limites verticales y1,y2 : ', y1,y2)
     toprint='Limites verticales y1,y2 : '+str(y1)+' '+str(y2)
-    mylog.append(toprint)
-    yield '<p>'+str(toprint)+'</p>'
+    file_in_progress_log.append(toprint)
+    # log time
+    logging.debug(f'{toprint}')
+
     PosRaieHaut=y1
     PosRaieBas=y2
     
@@ -438,9 +451,10 @@ def solex_proc_all(serfile, filename):
         ecart.append([x-LineRecal,y])
     
     #print('Coef A0,A1,A12', a,b,c)
-    toprint='Coef A0,A1,A2 '+"{:.2e}".format(a)+' '+"{:.2e}".format(b)+' '+"{:.2e}".format(c)
-    mylog.append(toprint)
-    yield '<p>'+str(toprint)+'</p>'
+    toprint='Coef A0,A1,A2 :'+"{:.2e}".format(a)+' '+"{:.2e}".format(b)+' '+"{:.2e}".format(c)
+    file_in_progress_log.append(toprint)
+    # log time
+    logging.debug(f'{toprint}')
     
     np_fit=np.asarray(fit)
     xi, xdec,y = np_fit.T
@@ -571,14 +585,14 @@ def solex_proc_all(serfile, filename):
         Disk[:,FrameIndex]=IntensiteRaie
         
         if FrameIndex%1000 ==0:
-            yield '<p> processing...</p>'
+            print("Processing...")
 
         
         #cv2.resizeWindow('disk',i-i1,ih)
         if ok_resize==False:
             Disk=Disk[1:,FrameIndex:]
             #Disp=Disk
-        if flag_display and FrameIndex %5 ==0:
+        if flag_display and FrameIndex % 5 == 0:
             cv2.imshow ('disk', Disk)
             if cv2.waitKey(1) == 27:                     # exit if Escape is hit
                      cv2.destroyAllWindows()    
@@ -596,7 +610,8 @@ def solex_proc_all(serfile, filename):
     DiskHDU=fits.PrimaryHDU(Disk,header=hdu.header)
     DiskHDU.writeto(basefich+'_img.fits',overwrite='True')
     toprint=basefich+'_img.fits'
-    yield '<p>'+str(toprint)+'</p>'
+    # log time
+    logging.debug(f'{toprint}')
     
     if flag_display:
         cv2.destroyAllWindows()
@@ -813,8 +828,8 @@ def solex_proc_all(serfile, filename):
             AlphaDeg=math.degrees(AlphaRad)
             #print('Angle slant: ',AlphaDeg)
             toprint='Angle slant: '+"{:+.2f}".format(AlphaDeg)
-            mylog.append(toprint)
-            yield '<p>'+str(toprint)+'</p>'
+            file_in_progress_log.append(toprint)
+            #------------yield '<p>'+str(toprint)+'</p>'
         
             
             #decale lignes images par rapport a x1
@@ -838,8 +853,9 @@ def solex_proc_all(serfile, filename):
             img=NewImg
         else:
             toprint='Angle slant: 0° '
-            mylog.append(toprint)
-            yield '<p>'+str(toprint)+'</p>'
+            file_in_progress_log.append(toprint)
+            # log time
+            logging.debug(f'{toprint}')
             
    
     # refait un calcul de mise a l'echelle
@@ -852,7 +868,8 @@ def solex_proc_all(serfile, filename):
     DiskHDU=fits.PrimaryHDU(frame,header=hdu.header)
     DiskHDU.writeto(basefich+'_recon.fits', overwrite='True')
     toprint=basefich+'_recon.fits'
-    yield '<p>'+str(toprint)+'</p>'
+    # log time
+    logging.debug(f'{toprint}')
     
     frame1=np.copy(frame)
     Seuil_bas=np.percentile(frame1, 25)
@@ -865,15 +882,17 @@ def solex_proc_all(serfile, filename):
     #sauvegarde en png
     cv2.imwrite(basefich+'_disk.png',frame_contrasted)
     #myimage=basefich+'_disk.png'
+
+    # sauvegarde en couleur inverser
+    img_png = cv2.imread(basefich+'_disk.png')
+    img_not = cv2.bitwise_not(img_png)
+    cv2.imwrite(basefich+'_disk_invert.png',img_not)
     
     #sauvegarde les infos de traitements
     Infos_txt=basefich+'.txt'
     with open(Infos_txt, "w") as output:
-        for line in mylog:  
+        for line in file_in_progress_log:  
             output.write(str(line)+';')
     base=os.path.splitext(filename)[0]
     print ('solex_ser :', base)
-    yield '<script>document.location.href="/result/'+base+'"</script>'
-    #yield '<script>document.location.href="/result"</script>'
-    
 

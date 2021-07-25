@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.83.1">
+    <link rel="icon" type="image/png" sizes="96x96" href="{{ url_for('static', filename='favicon-96x96.png') }}">
+    <title>INTI - Sol'EX SHG processing</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/dashboard/">
+   
+    
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
+
+    
+    <!-- Custom styles for this template -->
+    <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+  </head>
+  <body>
+    
+<header class="navbar navbar-dark sticky-top  flex-md-nowrap p-0 shadow">
+  <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 text-secondary font-weight-bold" href="/">INTI</a>
+  <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+        <input class="form-control form-control-dark w-100" name="workspace_value" id="workspace_name" type="text" placeholder="Saisir le nom du dossier de travail (Inti docker)" aria-label="Search">
+       <!-- <input class="form-label form-control form-control-dark w-100 filestyle" data-buttonText="Select a File" id="ser_filename" type="file" accept=".ser" placeholder="Type .ser file name here" aria-label="Search">-->
+
+
+
+
+  <ul class="navbar-nav px-3">
+    <li class="nav-item text-nowrap">
+      <a class="nav-link text-secondary " href="#"><button type="button" class="btn btn-danger" id="setPathBtn" >Valider</button></a>
+    </li>
+  </ul>
+</header>
+
+<div class="container-fluid">
+  <div class="row">
+    <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+      <div class="position-sticky pt-3">
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/">
+              <span data-feather="film"></span>
+              SER Unique
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/massprocess">
+              <span data-feather="cpu"></span>
+              Traitement en lot
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/monitor">
+              <span data-feather="eye"></span>
+              Surveillance de dossier
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" target="_blank" href="https://github.com/Vdesnoux/Inti">
+              <span data-feather="package"></span>
+              INTI - Installation locale
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" target="_blank" href="http://www.astrosurf.com/solex/">
+              <span data-feather="external-link"></span>
+              Sol'Ex Website
+            </a>
+          </li>
+        </ul>
+
+      </div>
+    </nav>
+
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+
+
+        <!-- File name input-->
+        <input class="form-control" id="ser_filename" type="file" accept=".ser">
+        <!-- sdo date and time input -->
+        <input class="form-control w-25" id="sdo_date" type="date">
+        <input class="form-control w-25" id="sdo_time" type="time">
+
+
+
+
+        <div class="form-check form-switch form-check-inline mx-3">
+          <input class="form-check-input" type="checkbox" id="sdocomp">
+          <label class="form-check-label" for="sdocomp">SDO</label>
+        </div>
+
+
+
+        <div class="form-check form-switch form-check-inline mx-3">
+          <input class="form-check-input" type="checkbox" id="expertmode">
+          <label class="form-check-label" for="expertmode">Expert</label>
+        </div>
+
+
+
+        <div class="btn-toolbar mb-2 mb-md-0 ">
+          <div class="btn-group me-2">
+            <button type="button" class="btn btn-outline-secondary" onclick="single_process()">Lancer</button>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- MENU EXPERT -->
+      <!---TODO : Décalage positif -> Cb ? // Décalage négatif -> Cb ?----->
+      <div class="row" id="expert_menu">
+    
+        <div class="col-md-4 col-lg-4">   
+          <input class="form-control" id="ser_filename" type="text" >
+        </div>
+        <div class="col-md-4 col-lg-4">   
+            <input class="form-control" id="ser_filename" type="text">
+        </div>
+        <div class="col-md-4 col-lg-4">   
+          <input class="form-control" id="ser_filename" type="text">
+        </div>
+
+      </div>
+
+
+
+
+      <!--------------------------EXPERT MODE ICI ------------------------>
+      <!--<canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>-->
+      
+      
+      
+      <!----------------------> <!--<div id="div_result" class="col-md-12 col-lg-12"><img id="result_image" class="img-fluid rounded" ></div>-->
+
+
+
+     <!-- <button class=" btn btn-danger" onclick="go()">Test</button> ------>
+          
+  
+
+       
+
+      <!-- ### position of the gallery ### -->
+     <h5 id="mypic_title" class="text-center">Mes images</h5>
+     <div class="col-md-12 col-lg-12 text-center" id="nanogallery2"></div>
+     <h5 id="sdopic_title" class="text-center">SDO</h5>
+     <div class="col-md-12 col-lg-12 text-center" id="sdogallery"></div>
+
+     <!--loader-->
+     <div class="col-md-12 col-lg-12 text-center"><img id="loader" class="img-fluid text-center rounded"><div id="loader_text">Chargement en cours...</div></div>
+
+
+     <!--  
+           <div data-nanogallery2 = '{
+        "thumbnailHeight":  300,
+        "thumbnailWidth":   300,
+        "itemsBaseURL":     "http://nanogallery2.nanostudio.org/samples/"
+      }'>
+    
+    
+      <a href="berlin1.jpg" data-ngthumb="berlin1.jpg">Title Image 1</a>
+      <a href="berlin2.jpg" data-ngthumb="berlin2.jpg">Title Image 2</a>
+      <a href="img_03.jpg" data-ngthumb="img_03t.jpg">Title Image 3</a>
+    </div>
+
+
+  -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      <!--src="/static/uploads/Capture 2021-06-13T12_54_29Z_disk.png"-->
+
+
+
+
+      <!--<h2>Files</h2>-->
+      <div class="table-responsive">
+        <table class="table table-striped table-sm" id="table_information">
+          <thead>
+            <tr>
+              <th>Log</th>
+              <th>Valeurs</th>
+              <th>Copier dans le presse-papiers</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+            <tr>
+              <td>Fichier PNG</td>
+              <td><span id="filetodownload"><a id="filedwn" href="" download></a></span></td>
+              <td><button class="btn btn-sm btn-outline-secondary" id="filetodownload_btn" onclick="copy(this)">Copy</button></td>
+            </tr>
+            <tr>
+              <td>Fichier SER</td>
+              <td><span id="serfilename"></span></td>
+              <td><button class="btn btn-sm btn-outline-secondary" id="serfilename_btn" onclick="copy(this)">Copy</button></td>
+            </tr>
+            <tr>
+              <td>Télécharger tous les fichiers (.zip)</td>
+              <td><span id="ziptodownload"><a id="zipdwn" href="" download></a></span></td>
+              <td><button class="btn btn-sm btn-outline-secondary" id="ziptodownload_btn" onclick="copy(this)">Copy</button></td>
+            </tr>
+            <tr>
+              <td>Nb de frame</td>
+              <td><p id="nbframe"></p></td>
+              <td><button class="btn btn-sm btn-outline-secondary" id="nbframe_btn" onclick="copy(this)">Copy</button></td>
+            </tr>
+            <tr>
+              <td>Limites Verticales</td>
+              <td><p id="vert_limit"></p></td>
+              <td><button class="btn btn-sm btn-outline-secondary" id="vert_limit_btn" onclick="copy(this)">Copy</button></td>
+            </tr>
+            <tr>
+              <td>Limites horizontales</td>
+              <td><p id="horiz_limit"></p></td>
+              <td><button class="btn btn-sm btn-outline-secondary" id="horiz_limit_btn" onclick="copy(this)">Copy</button></td>
+            </tr>
+            <tr>
+              <td>Coeff A0, A1, A2</td>
+              <td><p id="coeffa"></p></td>
+              <td><button class="btn btn-sm btn-outline-secondary" id="coeffa_btn" onclick="copy(this)">Copy</button></td>
+            </tr>
+            <tr>
+              <td>Axes y_x1, y_x2</td>
+              <td><p id="axesy"></p></td>
+              <td><button class="btn btn-sm btn-outline-secondary" id="axesy_btn" onclick="copy(this)">Copy</button></td>
+            </tr>
+            <tr>
+              <td>Centre cercle x0, y0 et diamiètre</td>
+              <td><p id="centercercle"></p></td>
+              <td><button class="btn btn-sm btn-outline-secondary" id="centercercle_btn" onclick="copy(this)">Copy</button></td>
+            </tr>
+            <tr>
+              <td>Ratio SY/SX</td>
+              <td><p id="ratiosysx"></p></td>
+              <td><button class="btn btn-sm btn-outline-secondary" id="ratiosysx_btn" onclick="copy(this)">Copy</button></td>
+            </tr>
+            <tr>
+              <td>Slant</td>
+              <td><p id="slant"></p></td>
+              <td><button class="btn btn-sm btn-outline-secondary" id="slant_btn" onclick="copy(this)">Copy</button></td>
+            </tr>
+          </tbody>
+        </table>
+
+
+
+      <!-- Toast Copy-->
+      <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+        <div id="copyToast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
+          <div class="toast-header">
+            <img src="{{ url_for('static', filename='favicon.ico') }}" class="rounded me-2" alt="...">
+            <strong class="me-auto">INTI message</strong>
+            <small>À l'instant</small>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+          </div>
+          <div class="toast-body">
+            La valeur a bien été copiée dans le presse-papiers.
+          </div>
+        </div>
+      </div>
+
+
+       <!-- Toast SDO -->
+       <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+        <div id="sdoToast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
+          <div class="toast-header">
+            <img src="{{ url_for('static', filename='favicon.ico') }}" class="rounded me-2" alt="...">
+            <strong class="me-auto">INTI message</strong>
+            <small>À l'instant</small>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+          </div>
+          <div class="toast-body">
+              Veuillez saisir la date et l'heure <b>(UTC)</b> de l'enregistrement pour comparaison avec les images SDO. Cette fonctionnalité SDO necéssite une connection internet.
+              <br/>Comment trouver le décalage ? :<br/> <a href="https://time.is/fr/UTC" target="_blank">https://time.is/fr/UTC</a>
+             </a>
+          </div>
+        </div>
+      </div>
+
+
+
+
+
+        <!-- Modal -->
+        <div class="modal fade" id="modalnewuser" tabindex="-1" aria-labelledby="newUserModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="newUserModalLabel">Bienvenue sur l'application INTI</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <h4>Premier passage ?</h4>
+                <p><span data-feather="arrow-left"> 
+                </span>
+                  Vous trouverez sur la gauche les trois fonctionnalités principales</p>
+                <p>L'élément commun et indispensable à ces fonctionnalités est le <b>dossier de travail</b> que vous
+                  avez défini au lancement de l'image Docker.</p>
+                <p>Commencez par saisir le nom de ce dossier dans le champs
+                  tout en haut de la page <span data-feather="arrow-up"></span> puis valider.
+                   Vous n'aurez plus à le faire si vous ne changer pas le nom saisi au lancement du Docker.
+                </p>
+                <p>Bon voyage en Sol'Ex ! <span data-feather="sun"></span></p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="set_modal_settings()">Ne plus afficher</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+
+
+      </div>
+    </main>
+  </div>
+</div>
+
+
+
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+      <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script>
+      <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js" integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous"></script>
+      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+      <script src="{{ url_for('static', filename='app.js') }}"></script>
+
+
+
+      <!-- nanogallery2 -->
+      <link  href="https://cdn.jsdelivr.net/npm/nanogallery2@3/dist/css/nanogallery2.min.css" rel="stylesheet" type="text/css">
+      <script  type="text/javascript" src="https://cdn.jsdelivr.net/npm/nanogallery2@3/dist/jquery.nanogallery2.min.js"></script>
+  </body>
+</html>
