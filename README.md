@@ -85,7 +85,8 @@ Pour lancer le container, allez sur l'application Docker Desktop, dans le menu I
 
 Pour accéder à l'application, ouvrez un navigateur et tapez l'adresse suivante : 127.0.0.1:5000
 
-![5.1-access_application](https://github.com/Vdesnoux/Inti/blob/main/docs/container/result.png "5.1")
+![5.1-access_application](https://github.com/matthieulel/Inti/blob/dev/docs/container/start_inti_v2.jpg "5.1")
+
 
 Il est également possible d'y accéder en appuyant sur le bouton "Open in browser" dans le menu Container de docker engine, sur notre inti-docker-dev. L'application a été développée actuellement pour fonctionner sur Firefox et Chrome.
 
