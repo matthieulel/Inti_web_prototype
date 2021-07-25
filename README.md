@@ -6,7 +6,7 @@ INTI est une application Web qui traite les fichiers SER vidéo pour générer u
 
 # Comment ça fonctionne ?
 
-Une seule action : ajoutez votre fichier vidéo .ser en cliquant sur le bouton lancer.
+Une seule action : ajoutez votre fichier vidéo .ser en le choisissant dans le dossier, et lancer le traitment.
 Vos pouvez directement télécharger les résultats du traitement via l'interface, ils sont égalements présents dans votre dossier.
 
 <br/>
